@@ -1,4 +1,4 @@
-const pool = require('../lib/pool');
+const client = require('../lib/client');
 const { getEmoji } = require('../lib/emoji.js');
 
 // async/await needs to run in a function
@@ -8,19 +8,22 @@ async function run() {
 
   try {
     // initiate connecting to db
-    await pool.connect();
+    await client.connect();
 
     // run a query to create tables
-    await pool.query(`
+    await client.query(`
                 CREATE TABLE users (
                     id SERIAL PRIMARY KEY,
                     email VARCHAR(256) NOT NULL,
                     hash VARCHAR(512) NOT NULL
                 );           
-                CREATE TABLE animals (
+                CREATE TABLE posts (
                     id SERIAL PRIMARY KEY NOT NULL,
-                    name VARCHAR(512) NOT NULL,
-                    cool_factor INTEGER NOT NULL,
+                    title VARCHAR(150) NOT NULL,
+                    image TEXT,
+                    body TEXT NOT NULL,
+                    video TEXT,
+                    vote_score INTEGER NOT NULL,
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
@@ -33,7 +36,7 @@ async function run() {
   }
   finally {
     // success or failure, need to close the db connection
-    pool.end();
+    client.end();
   }
 
 }

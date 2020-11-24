@@ -1,7 +1,7 @@
 /* eslint-disable indent */
-const pool = require('../lib/pool');
+const client = require('../lib/client');
 // import our seed data:
-const animals = require('./animals.js');
+const posts = require('./posts.js');
 const usersData = require('./users.js');
 const { getEmoji } = require('../lib/emoji.js');
 
@@ -10,11 +10,11 @@ run();
 async function run() {
 
   try {
-    await pool.connect();
+    await client.connect();
 
     const users = await Promise.all(
       usersData.map(user => {
-        return pool.query(`
+        return client.query(`
                       INSERT INTO users (email, hash)
                       VALUES ($1, $2)
                       RETURNING *;
@@ -26,12 +26,12 @@ async function run() {
     const user = users[0].rows[0];
 
     await Promise.all(
-      animals.map(animal => {
-        return pool.query(`
-                    INSERT INTO animals (name, cool_factor, owner_id)
-                    VALUES ($1, $2, $3);
+      posts.map(post => {
+        return client.query(`
+                    INSERT INTO posts (title, body, image, vote_score, owner_id)
+                    VALUES ($1, $2, $3, $4, $5);
                 `,
-          [animal.name, animal.cool_factor, user.id]);
+          [post.title, post.body, post.image, post.vote_score, user.id]);
       })
     );
 
@@ -42,7 +42,7 @@ async function run() {
     console.log(err);
   }
   finally {
-    pool.end();
+    client.end();
   }
 
 }

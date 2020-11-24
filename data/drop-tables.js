@@ -1,4 +1,4 @@
-const pool = require('../lib/pool');
+const client = require('../lib/client');
 const { getEmoji } = require('../lib/emoji.js');
 
 run();
@@ -6,11 +6,11 @@ run();
 async function run() {
 
   try {
-    await pool.connect();
+    await client.connect();
 
-    await pool.query(`
+    await client.query(`
             DROP TABLE IF EXISTS users CASCADE;
-            DROP TABLE IF EXISTS animals;
+            DROP TABLE IF EXISTS posts;
         `);
 
     console.log(' drop tables complete', getEmoji(), getEmoji(), getEmoji());
@@ -19,7 +19,7 @@ async function run() {
     console.log(err);
   }
   finally {
-    pool.end();
+    client.end();
   }
 
 }
