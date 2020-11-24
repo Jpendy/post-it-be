@@ -23,6 +23,7 @@ async function run() {
                     image TEXT,
                     body TEXT NOT NULL,
                     video TEXT,
+                    category TEXT NOT NULL,
                     vote_score INTEGER NOT NULL,
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );

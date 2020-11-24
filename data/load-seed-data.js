@@ -28,10 +28,10 @@ async function run() {
     await Promise.all(
       posts.map(post => {
         return client.query(`
-                    INSERT INTO posts (title, body, image, vote_score, owner_id)
-                    VALUES ($1, $2, $3, $4, $5);
+                    INSERT INTO posts (title, body, image, category, vote_score, owner_id)
+                    VALUES ($1, $2, $3, $4, $5, $6);
                 `,
-          [post.title, post.body, post.image, post.vote_score, user.id]);
+          [post.title, post.body, post.image, post.category, post.vote_score, user.id]);
       })
     );
 
