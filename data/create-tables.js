@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable indent */
 const client = require('../lib/client');
 const { getEmoji } = require('../lib/emoji.js');
 
@@ -27,6 +29,15 @@ async function run() {
                     vote_score INTEGER NOT NULL,
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );
+
+                CREATE TABLE comments (
+                  id SERIAL PRIMARY KEY NOT NULL,
+                  owner_id INTEGER NOT NULL REFERENCES users(id),
+                  post_id INTEGER NOT NULL REFERENCES posts(id),
+                  title TEXT NOT NULL,
+                  body TEXT NOT NULL,
+                  vote_score INTEGER NOT NULL
+                );
         `);
 
     console.log('create tables complete', getEmoji(), getEmoji(), getEmoji());

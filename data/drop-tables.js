@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-console */
 const client = require('../lib/client');
 const { getEmoji } = require('../lib/emoji.js');
 
@@ -10,7 +12,9 @@ async function run() {
 
     await client.query(`
             DROP TABLE IF EXISTS users CASCADE;
-            DROP TABLE IF EXISTS posts;
+            DROP TABLE IF EXISTS posts CASCADE;
+            DROP TABLE IF EXISTS comments;
+
         `);
 
     console.log(' drop tables complete', getEmoji(), getEmoji(), getEmoji());
