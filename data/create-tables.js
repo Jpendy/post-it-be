@@ -30,6 +30,13 @@ async function run() {
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );
 
+            CREATE TABLE posts_vote_history (
+              id serial PRIMARY KEY NOT NULL,
+              owner_id INTEGER NOT NULL REFERENCES users(id),
+              post_id INTEGER NOT NULL REFERENCES posts(id),
+              vote INTEGER NOT NULL
+            );
+
                 CREATE TABLE comments (
                   id SERIAL PRIMARY KEY NOT NULL,
                   owner_id INTEGER NOT NULL REFERENCES users(id),

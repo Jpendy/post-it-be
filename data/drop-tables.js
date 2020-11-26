@@ -13,6 +13,7 @@ async function run() {
     await client.query(`
             DROP TABLE IF EXISTS users CASCADE;
             DROP TABLE IF EXISTS posts CASCADE;
+            DROP TABLE IF EXISTS posts_vote_history;
             DROP TABLE IF EXISTS comments;
 
         `);
