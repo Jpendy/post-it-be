@@ -1,5 +1,6 @@
+/* eslint-disable indent */
 require('dotenv').config();
-require('./lib/client').connect();
+require('./lib/pool').connect();
 
 const app = require('./lib/app');
 
