@@ -20,7 +20,8 @@ async function run() {
         DROP TABLE IF EXISTS users CASCADE;
         DROP TABLE IF EXISTS posts CASCADE;
         DROP TABLE IF EXISTS posts_vote_history;
-        DROP TABLE IF EXISTS comments;
+        DROP TABLE IF EXISTS comments CASCADE;
+        DROP TABLE IF EXISTS comments_vote_history;
     `);
         console.log(' drop tables complete', getEmoji(), getEmoji(), getEmoji());
 
@@ -57,6 +58,13 @@ async function run() {
                   body TEXT NOT NULL,
                   vote_score INTEGER NOT NULL
                 );
+
+                CREATE TABLE comments_vote_history (
+                    id serial PRIMARY KEY NOT NULL,
+                    owner_id INTEGER NOT NULL REFERENCES users(id),
+                    comment_id INTEGER NOT NULL REFERENCES comments(id),
+                    vote INTEGER NOT NULL
+                )
         `);
         console.log('create tables complete', getEmoji(), getEmoji(), getEmoji());
 
