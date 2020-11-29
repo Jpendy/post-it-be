@@ -36,7 +36,7 @@ async function run() {
                     id SERIAL PRIMARY KEY NOT NULL,
                     title VARCHAR(150) NOT NULL,
                     image TEXT,
-                    body TEXT NOT NULL,
+                    body TEXT,
                     video TEXT,
                     category TEXT NOT NULL,
                     vote_score INTEGER NOT NULL,
