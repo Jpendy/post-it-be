@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 module.exports = [
   {
-    email: 'john@arbuckle.com',
+    email: 'John',
     hash: 1234
   }
 ];

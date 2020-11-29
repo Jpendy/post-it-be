@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "seed": "node data/create-and-load-with-pool.js",
     "test": "jest --verbose --runInBand",
     "test:watch": "npm run test -- --watch",
     "start": "node server.js",
