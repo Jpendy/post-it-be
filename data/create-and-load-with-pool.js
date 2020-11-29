@@ -18,6 +18,7 @@ async function run() {
         //drop tables
         await pool.query(`
         DROP TABLE IF EXISTS users CASCADE;
+        DROP TABLE IF EXISTS boards CASCADE;
         DROP TABLE IF EXISTS posts CASCADE;
         DROP TABLE IF EXISTS posts_vote_history;
         DROP TABLE IF EXISTS comments CASCADE;
@@ -28,39 +29,49 @@ async function run() {
         // run a query to create tables
         await pool.query(`
                 CREATE TABLE users (
-                    id SERIAL PRIMARY KEY,
+                    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                     email VARCHAR(256) NOT NULL,
                     hash VARCHAR(512) NOT NULL
                 );           
+
+                    CREATE TABLE boards (
+                        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                        owner_id INTEGER NOT NULL REFERENCES users(id),
+                        board_name TEXT NOT NULL,
+                        board_color_1 TEXT,
+                        board_color_2 TEXT,
+                        board_color_3 TEXT
+                );
+
                 CREATE TABLE posts (
-                    id SERIAL PRIMARY KEY NOT NULL,
+                    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                    board_id INTEGER NOT NULL REFERENCES boards(id),
+                    vote_score INTEGER NOT NULL,
+                    owner_id INTEGER NOT NULL REFERENCES users(id),
                     title VARCHAR(150) NOT NULL,
                     image TEXT,
                     body TEXT,
-                    video TEXT,
-                    category TEXT NOT NULL,
-                    vote_score INTEGER NOT NULL,
-                    owner_id INTEGER NOT NULL REFERENCES users(id)
-            );
+                    video TEXT
+                );
 
-            CREATE TABLE posts_vote_history (
-              id serial PRIMARY KEY NOT NULL,
-              owner_id INTEGER NOT NULL REFERENCES users(id),
-              post_id INTEGER NOT NULL REFERENCES posts(id),
-              vote INTEGER NOT NULL
-            );
+                CREATE TABLE posts_vote_history (
+                    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                    owner_id INTEGER NOT NULL REFERENCES users(id),
+                    post_id INTEGER NOT NULL REFERENCES posts(id),
+                    vote INTEGER NOT NULL
+                );
 
                 CREATE TABLE comments (
-                  id SERIAL PRIMARY KEY NOT NULL,
-                  owner_id INTEGER NOT NULL REFERENCES users(id),
-                  post_id INTEGER NOT NULL REFERENCES posts(id),
-                  title TEXT NOT NULL,
-                  body TEXT NOT NULL,
-                  vote_score INTEGER NOT NULL
+                    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                    owner_id INTEGER NOT NULL REFERENCES users(id),
+                    post_id INTEGER NOT NULL REFERENCES posts(id),
+                    title TEXT NOT NULL,
+                    body TEXT NOT NULL,
+                    vote_score INTEGER NOT NULL
                 );
 
                 CREATE TABLE comments_vote_history (
-                    id serial PRIMARY KEY NOT NULL,
+                    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                     owner_id INTEGER NOT NULL REFERENCES users(id),
                     comment_id INTEGER NOT NULL REFERENCES comments(id),
                     vote INTEGER NOT NULL
