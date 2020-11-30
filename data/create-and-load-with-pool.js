@@ -5,6 +5,7 @@ const usersData = require('./users.js');
 
 const { getEmoji } = require('../lib/emoji.js');
 const posts = require('./posts');
+const boards = require('./boards');
 
 // async/await needs to run in a function
 run();
@@ -94,12 +95,23 @@ async function run() {
         const user = users[0].rows[0];
 
         await Promise.all(
+            boards.map(board => {
+                return pool.query(`
+                      INSERT INTO boards (board_name,  owner_id)
+                      VALUES ($1, $2)
+                      RETURNING *;
+                  `,
+                    [board.board_name, user.id]);
+            })
+        );
+
+        await Promise.all(
             posts.map(post => {
                 return pool.query(`
-                    INSERT INTO posts (title, body, image, category, vote_score, owner_id)
+                    INSERT INTO posts (title, body, image, board_id, vote_score, owner_id)
                     VALUES ($1, $2, $3, $4, $5, $6);
                 `,
-                    [post.title, post.body, post.image, post.category, post.vote_score, user.id]);
+                    [post.title, post.body, post.image, post.board_id, 0, user.id]);
             })
         );
         console.log('seed data load complete', getEmoji(), getEmoji(), getEmoji());
